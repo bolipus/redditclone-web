@@ -1,0 +1,74 @@
+<div class="container">
+  <div class="row link border p-3" *ngFor="let link of links">
+    <div class="col-1">
+
+      <a href="#" class="upvote">
+        <fa-icon [icon]="faArrowUp"></fa-icon>
+      </a>
+      <div class="votecount">{{link.voteCount}}</div>
+      <a href="#" class="downvote">
+        <fa-icon [icon]="faArrowDown"></fa-icon>
+      </a>
+
+    </div>
+    <div class="col-11">
+      <p class="title">
+        <a class="title " href="{{link.url}}">
+          {{link.title}}
+        </a>
+        <span class="domain">(<a>{{link.domainName}}</a>)</span>
+      </p>
+      <p class="tagline ">submitted
+        <time datetime="2018-03-10T06:26:36+00:00" class="live-timestamp">
+          {{link.prettyCreatedDate}}
+        </time> by
+        <span class="author">{{link.createdBy}}</span>
+        <span class="userattrs"></span>
+      </p>
+      <p>
+        <a href="#" class="comments" data-toggle="collapse" href="#commentsPanel" role="button">
+          <fa-icon [icon]="faComments"></fa-icon> {{link.comments.length}} comments
+        </a>
+      </p>
+    </div>
+
+
+    <div class="comments collapse col-12" id="commentsPanel">
+      <div class="row header">
+        <div class="col-1">&nbsp;</div>
+        <div class="col-11 title">
+          all {{link.comments.length}} comments
+        </div>
+      </div>
+      <div class="row addcomment">
+        <div class="col-1">&nbsp;</div>
+        <div class="col-11">
+          <div class="form-group">
+            <textarea class="form-control" id="comment" rows="3"></textarea>
+          </div>
+          <button type="button" class="btn btn-primary">Add Comment</button>
+        </div>
+      </div>
+      <div class="row comment" *ngFor="let comment of link.comments">
+        <div class="col-1">&nbsp;</div>
+        <div class="col-11">
+          <span><a href="#">
+              <fa-icon [icon]="faComments"></fa-icon> {{comment.createdBy}}
+            </a></span>
+          <span><i class="far fa-clock"></i> {{comment.prettyCreatedDate}}</span>
+          <p class="body">
+            {{comment.body}}
+          </p>
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+
+  </div>
+
+
+</div>

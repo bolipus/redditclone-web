@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { faArrowUp} from '@fortawesome/free-solid-svg-icons';
 import { faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import { faComments} from '@fortawesome/free-solid-svg-icons';
+import { faUser} from '@fortawesome/free-solid-svg-icons';
+
+import { LinkService } from '../../services/link.service';
+import { Link } from '../../models/link';
 
 @Component({
   selector: 'app-home',
@@ -14,10 +18,24 @@ export class HomeComponent implements OnInit {
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
   faComments = faComments;
+  faUser = faUser;
 
-  constructor() { }
+  links: Link[];
+
+  error: string;
+
+  constructor(private linkService: LinkService ) { }
 
   ngOnInit(): void {
+    this.findAllLinks();
   }
+
+  findAllLinks(){
+    this.linkService.findAllLinks().subscribe(
+      (links) => this.links = links,
+      (error) => console.log(error)
+    );
+  }
+
 
 }
