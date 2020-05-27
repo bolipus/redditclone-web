@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { AppService } from '../../services/app.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { ResponseToken } from '../../models/response-token';
 
 @Component({
   selector: 'app-login',
@@ -29,27 +30,31 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
+    this.error = '';
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
     this.appService.authenticate(email, password).subscribe(
-      (user) => {
-        this.appService.setUser(user);
-        if (user) {
-          sessionStorage.setItem(
-            'token',
-            btoa(email + ':' + password)
-          );
-          this.router.navigate(['home']);
-        } else {
-          this.error = 'Authentication failed.';
-        }
-
-
-      },
-      (error: HttpErrorResponse) => {
+    (data: ResponseToken) => {
+      console.log('Token:' + data.token);
+      sessionStorage.setItem('token', data.token);
+      this.appService.getAuthenticatedUser().subscribe(
+          (user) => {
+            console.log('user');
+            if (user) {
+              this.appService.setUser(user);
+              this.router.navigate(['home']);
+            } else {
+              this.error = 'Authentication failed.';
+            }
+          }
+      );
+    },
+    (error: HttpErrorResponse) => {
         this.error = error.error;
-      }
+      },
+      () => console.log('Auth Completed.')
     )
+
   }
 
 }
