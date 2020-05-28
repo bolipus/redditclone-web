@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '../../services/app.service';
 import { Router } from '@angular/router';
 import { User } from '../../models/user';
+import { AuthenticationService } from '../../services/authentication.service';
 
 
 @Component({
@@ -12,23 +12,28 @@ import { User } from '../../models/user';
 export class HeaderComponent implements OnInit {
 
 
-  constructor(private appService: AppService,  private router: Router) {}
+  constructor(private authenticationService: AuthenticationService,  private router: Router) {}
 
   ngOnInit(): void {
   }
 
   logout(){
     sessionStorage.removeItem('token');
-    this.appService.invalidateUser();
+    sessionStorage.removeItem('user');
+    this.authenticationService.invalidateUser();
     this.router.navigate(['home']);
   }
 
   isAuthenticated(): boolean{
-    return this.appService.isAuthenticated();
+    return this.authenticationService.isAuthenticated();
+  }
+
+  isAdmin(): boolean {
+    return this.authenticationService.isAdmin();
   }
 
   getUser(): User  {
-    return this.appService.getUser();
+    return this.authenticationService.getUser();
   }
 
 }

@@ -40,7 +40,7 @@
           all {{link.comments.length}} comments
         </div>
       </div>
-      <div class="row addcomment">
+      <div class="row addcomment" *ngIf="isAuthenticated()">
         <div class="col-1">&nbsp;</div>
         <div class="col-11">
           <div class="form-group">

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { AppService } from '../../services/app.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthenticationService } from '../../services/authentication.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ResponseToken } from '../../models/response-token';
@@ -14,15 +14,15 @@ export class LoginComponent implements OnInit {
 
   loginForm = new FormGroup(
     {
-       email: new FormControl(''),
-       password: new FormControl('')
+       email: new FormControl('', [Validators.email, Validators.required]),
+       password: new FormControl('', [Validators.required])
     }
   );
 
   success = '';
   error = '';
 
-  constructor(private appService: AppService,  private router: Router,
+  constructor(private authenticationService: AuthenticationService,  private router: Router,
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -33,27 +33,36 @@ export class LoginComponent implements OnInit {
     this.error = '';
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
-    this.appService.authenticate(email, password).subscribe(
+    this.authenticationService.authenticate(email, password).subscribe(
     (data: ResponseToken) => {
       console.log('Token:' + data.token);
-      sessionStorage.setItem('token', data.token);
-      this.appService.getAuthenticatedUser().subscribe(
+      sessionStorage.setItem('token', 'Bearer ' + data.token);
+      sessionStorage.setItem('username', email);
+      this.authenticationService.getAuthenticatedUser().subscribe(
           (user) => {
             console.log('user');
             if (user) {
-              this.appService.setUser(user);
-              this.router.navigate(['home']);
+              this.authenticationService.setUser(user);
+              sessionStorage.setItem('user', JSON.stringify(user));
+              if (this.authenticationService.getRedirectUrl()!=null){
+                this.router.navigate([this.authenticationService.getRedirectUrl()]);
+              } else {
+                this.authenticationService.clearRedirectUrl();
+                this.router.navigate(['home']);
+              }
             } else {
               this.error = 'Authentication failed.';
+              this.router.navigate(['login']);
             }
           }
       );
     },
     (error: HttpErrorResponse) => {
-        this.error = error.error;
+      this.error = 'Authentication failed. Wrong username/password';
+      this.router.navigate(['login']);
       },
       () => console.log('Auth Completed.')
-    )
+    );
 
   }
 

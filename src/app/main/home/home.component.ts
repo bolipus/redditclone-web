@@ -7,6 +7,7 @@ import { faUser} from '@fortawesome/free-solid-svg-icons';
 
 import { LinkService } from '../../services/link.service';
 import { Link } from '../../models/link';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,9 @@ export class HomeComponent implements OnInit {
 
   error: string;
 
-  constructor(private linkService: LinkService ) { }
+  constructor(private linkService: LinkService, private authenticationService: AuthenticationService ) {
+
+   }
 
   ngOnInit(): void {
     this.findAllLinks();
@@ -37,5 +40,8 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  isAuthenticated(): boolean {
+    return this.authenticationService.isAuthenticated();
+  }
 
 }

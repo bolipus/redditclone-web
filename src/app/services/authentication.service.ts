@@ -8,12 +8,14 @@ import { ResponseToken } from '../models/response-token';
 @Injectable({
   providedIn: 'root'
 })
-export class AppService {
+export class AuthenticationService {
 
   user: User = null;
 
   authUrl = environment.backendServerUrl + '/authenticate';
   authUserUrl = environment.backendServerUrl + '/authenticatedUser';
+
+  redirectUrl = 'home';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -41,7 +43,31 @@ export class AppService {
     return this.user !== null;
   }
 
-  invalidateUser(){
+  isAdmin(): boolean{
+
+    for (const role of this.user.roles){
+      if (role.name === 'ROLE_ADMIN') {
+        console.log('isAdmin:' + 'ROLE_ADMIN');
+        return true;
+      }
+    }
+    console.log('isAdmin:' + 'NO')
+    return false;
+  }
+
+  invalidateUser(): void{
     this.user = null;
+  }
+
+  getRedirectUrl(): string {
+    return this.redirectUrl;
+  }
+
+  setRedirectUrl(url: string): void {
+    this.redirectUrl = url;
+  }
+
+  clearRedirectUrl(): void {
+    this.redirectUrl = null;
   }
 }

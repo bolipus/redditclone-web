@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule} from '@angular/forms';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +12,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SubmitLinkComponent } from './main/submit-link/submit-link.component';
 import { AccountComponent } from './main/account/account.component';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,11 @@ import { AccountComponent } from './main/account/account.component';
     FontAwesomeModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    [
+      { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    ]
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

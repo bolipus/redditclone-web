@@ -2,25 +2,34 @@
   <div class="col-4 border p-3 ">
     <h2>Register new user</h2>
 
-    <form>
+    <form [formGroup]="registerForm" #regForm = "ngForm">
       <div class="form-group">
-        <label for="nameInput">Name</label>
-        <input type="text" id="nameInput" class="form-control">
+        <label for="firstNameInput">First name</label>
+        <input type="text" id="firstNameInput" formControlName="firstName" class="form-control" placeholder="Janez">
+      </div>
+      <div class="form-group">
+        <label for="lastNameInput">Last name</label>
+        <input type="text" id="lastNameInput" formControlName="lastName" class="form-control" placeholder="Novak">
+      </div>
+      <div class="form-group">
+        <label for="aliasInput">Alias</label>
+        <input type="text" id="aliasInput" formControlName="alias" class="form-control" placeholder="Janko">
       </div>
       <div class="form-group">
         <label for="emailInput">Email</label>
-        <input  type="text" id="emailInput" class="form-control">
+        <input  type="text" id="emailInput" formControlName="email" class="form-control" placeholder="janez.novak@email.com">
       </div>
       <div class="form-group">
         <label for="passwordInput">Password</label>
-        <input type="password" id="passwordInput" class="form-control">
+        <input type="password" id="passwordInput" formControlName="password" class="form-control" placeholder="password">
       </div>
       <div class="form-group">
         <label for="confirmPasswordInput">Confirm Password</label>
-        <input type="password" formControlName="password" id="confirmPasswordInput" class="form-control">
+        <input type="password" formControlName="confirmedPassword" id="confirmPasswordInput" class="form-control" placeholder="password">
+        <small class="text-muted" *ngIf="!passwordMatch()"> Passwords does not match!</small>
       </div>
 
-      <button type="button"  class="btn btn-primary"> Register </button>
+      <button type="button"  class="btn btn-primary float-right mt-3" [disabled]="!regForm.valid || !passwordMatch()"> Register </button>
 
     </form>
 
