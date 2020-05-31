@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { UserRegister } from '../../models/user-register';
+
 
 @Component({
   selector: 'app-register',
@@ -20,7 +23,7 @@ export class RegisterComponent implements OnInit {
   );
 
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
   }
@@ -33,6 +36,35 @@ export class RegisterComponent implements OnInit {
     return false;
   }
 
+  register(): void {
+    const userRegister: UserRegister = {
+      id: 0,
+      fullName:'',
+      enabled: true,
+      roles: [],
+      firstName: this.registerForm.value.firstName,
+      lastName: this.registerForm.value.lastName,
+      alias: this.registerForm.value.alias,
+      email: this.registerForm.value.email,
+      password: this.registerForm.value.password,
+      confirmedPassword: this.registerForm.value.confirmedPassword
+    };
 
+
+    console.log(userRegister);
+
+    this.userService.register(userRegister).subscribe(
+      (user) => {
+        console.log('User registred:' + user);
+      },
+      (err) => {
+        console.log('Error:' +err);
+      },
+      () => {
+        console.log('Completed');
+      }
+
+    );
+  }
 
 }

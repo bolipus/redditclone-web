@@ -12,23 +12,20 @@ export class AuthenticationService {
 
   user: User = null;
 
-  authUrl = environment.backendServerUrl + '/authenticate';
-  authUserUrl = environment.backendServerUrl + '/authenticatedUser';
-
   redirectUrl = 'home';
 
   constructor(private httpClient: HttpClient) { }
 
   authenticate(email: string, password: string): Observable<ResponseToken> {
 
-    return this.httpClient.post<ResponseToken>(this.authUrl, {
+    return this.httpClient.post<ResponseToken>(environment.backendServerUrl + '/authenticate', {
       email,
       password
     });
   }
 
   getAuthenticatedUser(): Observable<User> {
-    return this.httpClient.get<User>(this.authUserUrl);
+    return this.httpClient.get<User>(environment.backendServerUrl + '/authenticatedUser');
   }
 
   setUser(user: User) {
@@ -47,11 +44,9 @@ export class AuthenticationService {
 
     for (const role of this.user.roles){
       if (role.name === 'ROLE_ADMIN') {
-        console.log('isAdmin:' + 'ROLE_ADMIN');
         return true;
       }
     }
-    console.log('isAdmin:' + 'NO')
     return false;
   }
 
