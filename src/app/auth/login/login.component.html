@@ -1,10 +1,10 @@
-<div class="row  justify-content-md-center">
+<div class="row justify-content-md-center">
   <div class="col-4 border p-3 ">
     <h2>SignIn</h2>
     <div class="alert alert-danger" *ngIf="error">
       {{error}}
     </div>
-    <form [formGroup]="loginForm" #logForm = "ngForm">
+    <form [formGroup]="loginForm" #f = "ngForm">
       <div class="form-group">
         <label for="emailInput">Email</label>
         <input type="text" formControlName="email" id="emailInput" class="form-control" placeholder="email@domain.com">
@@ -14,7 +14,7 @@
         <input type="password" formControlName="password" id="passwordInput" class="form-control" placeholder="password">
       </div>
 
-      <button type="submit" (click)="login()" class="btn btn-primary float-right" [disabled]="!logForm.valid" > SignIn </button>
+      <button type="button" (click)="login()" class="btn btn-primary float-right" [disabled]="!f.valid" > SignIn </button>
 
     </form>
 

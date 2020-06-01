@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { UserRegister } from '../../models/user-register';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -22,6 +23,9 @@ export class RegisterComponent implements OnInit {
     }
   );
 
+  success = '';
+  error ='';
+
 
   constructor(private userService: UserService) { }
 
@@ -37,28 +41,20 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): void {
-    const userRegister: UserRegister = {
-      id: 0,
-      fullName:'',
-      enabled: true,
-      roles: [],
-      firstName: this.registerForm.value.firstName,
-      lastName: this.registerForm.value.lastName,
-      alias: this.registerForm.value.alias,
-      email: this.registerForm.value.email,
-      password: this.registerForm.value.password,
-      confirmedPassword: this.registerForm.value.confirmedPassword
-    };
 
+    const userRegister: UserRegister = {
+      ...this.registerForm.value,
+      enabled: true,
+    };
 
     console.log(userRegister);
 
     this.userService.register(userRegister).subscribe(
       (user) => {
-        console.log('User registred:' + user);
+        this.success = 'User with email:' + user.email + ' was succesfully registred.';
       },
-      (err) => {
-        console.log('Error:' +err);
+      (err: HttpErrorResponse) => {
+       this.error = err.message;
       },
       () => {
         console.log('Completed');

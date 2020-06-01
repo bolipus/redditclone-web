@@ -14,6 +14,10 @@ export class LinkService {
   constructor(private httpClient: HttpClient) { }
 
   findAllLinks(): Observable<Link[]>{
-    return this.httpClient.get<Link[]>(this.linksDataUrl);
+    return this.httpClient.get<Link[]>(environment.backendServerUrl + '/api/v1/links');
+  }
+
+  addLink(link: Link): Observable<Link>{
+    return this.httpClient.post<Link>(environment.backendServerUrl+'/api/v1/links', link);
   }
 }

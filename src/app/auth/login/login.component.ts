@@ -54,11 +54,14 @@ export class LoginComponent implements OnInit {
               this.error = 'Authentication failed.';
               this.router.navigate(['login']);
             }
+          },
+          (err: HttpErrorResponse) => {
+            this.error = err.message;
           }
       );
     },
     (error: HttpErrorResponse) => {
-      this.error = 'Authentication failed. Wrong username/password';
+      this.error = error.message;
       this.router.navigate(['login']);
       },
       () => console.log('Auth Completed.')

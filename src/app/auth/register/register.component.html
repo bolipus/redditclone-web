@@ -1,7 +1,12 @@
 <div class="row  justify-content-md-center">
   <div class="col-4 border p-3 ">
     <h2>Register new user</h2>
-
+    <div class="alert alert-success" *ngIf="success">
+      {{success}}
+    </div>
+    <div class="alert alert-danger" *ngIf="error">
+      {{error}}
+    </div>
     <form [formGroup]="registerForm" #regForm = "ngForm">
       <div class="form-group">
         <label for="firstNameInput">First name</label>
